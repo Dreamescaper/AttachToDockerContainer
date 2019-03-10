@@ -79,7 +79,7 @@ namespace AttachToDockerContainer
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var testDialog = new AttachToDockerContainerDialog();
+            var testDialog = new AttachToDockerContainerDialog(package);
             testDialog.ShowModal();
         }
     }

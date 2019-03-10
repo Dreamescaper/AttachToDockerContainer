@@ -9,7 +9,6 @@ namespace AttachToDockerContainer
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(AttachToDockerContainerPackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(AttachToDockerContainerDialog))]
     public sealed class AttachToDockerContainerPackage : AsyncPackage
     {
         public const string PackageGuidString = "6cc17e98-631b-4af5-a461-ef1258c805a4";
@@ -20,6 +19,7 @@ namespace AttachToDockerContainer
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await AttachToDockerContainerDialogCommand.InitializeAsync(this);
+            await DebugAdapterHostLauncher.InitializeAsync(this);
         }
     }
 }

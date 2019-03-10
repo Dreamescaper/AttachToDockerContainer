@@ -17,7 +17,7 @@
       <Button guid="guidAttachToDockerContainerPackageCmdSet" id="AttachToDockerContainerDialogCommandId" priority="0x1000" type="Button">
         <Parent guid="guidVSDebugGroup" id="IDG_EXECUTION" />
         <Strings>
-          <ButtonText>AttachToDockerContainerDialog</ButtonText>
+          <ButtonText>Attach to Docker container</ButtonText>
         </Strings>
       </Button>
       
