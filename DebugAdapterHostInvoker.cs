@@ -9,16 +9,15 @@ namespace AttachToDockerContainer
     public class DebugAdapterHostLauncher
     {
         private readonly DTE _dte;
-        private readonly AsyncPackage _package;
 
-        private DebugAdapterHostLauncher(AsyncPackage package, DTE dte)
+        private DebugAdapterHostLauncher(DTE dte)
         {
             _dte = dte;
-            _package = package;
         }
 
         public void Launch(string containerName, string vsDbgPath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var dotnetPid = DockerCmd.Execute($"exec -it {containerName} pidof dotnet");
 
             // Need to create json file to pass to DebugAdapterHost.Launch
@@ -81,7 +80,7 @@ namespace AttachToDockerContainer
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            Instance = new DebugAdapterHostLauncher(package, dte);
+            Instance = new DebugAdapterHostLauncher(dte);
         }
     }
 }

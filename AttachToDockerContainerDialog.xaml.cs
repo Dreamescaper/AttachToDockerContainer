@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace AttachToDockerContainer
@@ -14,6 +15,8 @@ namespace AttachToDockerContainer
 
         public AttachToDockerContainerDialog(IServiceProvider serviceProvider)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             _serviceProvider = serviceProvider;
             InitializeComponent();
 
@@ -30,6 +33,8 @@ namespace AttachToDockerContainer
 
         private void AttachButton_Click(object sender, RoutedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var containerName = ContainerComboBox.Text;
             var vsDbgPath = VsDbgPathTextBox.Text;
 
@@ -53,6 +58,8 @@ namespace AttachToDockerContainer
         {
             const string collectionPath = nameof(AttachToDockerContainerDialog);
 
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             SettingsStore.CollectionExists(collectionPath, out int exists);
             if (exists != 1)
             {
@@ -69,6 +76,8 @@ namespace AttachToDockerContainer
         {
             const string collectionPath = nameof(AttachToDockerContainerDialog);
 
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             SettingsStore.CollectionExists(collectionPath, out int exists);
             if (exists != 1)
             {
@@ -84,6 +93,7 @@ namespace AttachToDockerContainer
         {
             get
             {
+                ThreadHelper.ThrowIfNotOnUIThread();
                 if (_settingsStore == null)
                 {
                     var settingsManager = (IVsSettingsManager)_serviceProvider.GetService(typeof(SVsSettingsManager));
