@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Extern href="VSDbgCmd.h" />
+  <Extern href="VsDebugGuids.h" />
+  
+  <Commands package="guidAttachToDockerContainerPackage">
+    <Buttons>
+      <!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node /> -->
+      <Button guid="guidAttachToDockerContainerPackageCmdSet" id="AttachToDockerContainerDialogCommandId" priority="0x1000" type="Button">
+        <Parent guid="guidVSDebugGroup" id="IDG_EXECUTION" />
+        <Strings>
+          <ButtonText>AttachToDockerContainerDialog</ButtonText>
+        </Strings>
+      </Button>
+      
+    </Buttons>
+    
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidAttachToDockerContainerPackage" value="{6cc17e98-631b-4af5-a461-ef1258c805a4}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidAttachToDockerContainerPackageCmdSet" value="{f16ae8c7-fc7c-4105-b7a0-30acea771ab0}">
+      <IDSymbol name="AttachToDockerContainerDialogCommandId" value="0x0100" />
+    </GuidSymbol>
+    
+  </Symbols>
+</CommandTable>
