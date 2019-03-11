@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="AttachToDockerContainerDialogCommand.cs" />
     <Compile Include="DebugAdapterHostInvoker.cs" />
-    <Compile Include="DockerCmd.cs" />
+    <Compile Include="DockerCli.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachToDockerContainerPackage.cs" />
     <Compile Include="AttachToDockerContainerDialog.xaml.cs">

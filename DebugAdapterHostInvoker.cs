@@ -18,7 +18,7 @@ namespace AttachToDockerContainer
         public void Launch(string containerName, string vsDbgPath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var dotnetPid = DockerCmd.Execute($"exec -it {containerName} pidof dotnet");
+            var dotnetPid = DockerCli.Execute($"exec -it {containerName} pidof dotnet");
 
             // Need to create json file to pass to DebugAdapterHost.Launch
             var launchJsonPath = CreateLaunchJson(containerName, vsDbgPath, dotnetPid);

@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
     Height="150" 
     Width="350"
+    ResizeMode="NoResize"
     Title="Attach to Docker container">
     <Grid>
         <Button 

@@ -2,7 +2,7 @@
 
 namespace AttachToDockerContainer
 {
-    public static class DockerCmd
+    public static class DockerCli
     {
         public static string Execute(string arguments)
         {

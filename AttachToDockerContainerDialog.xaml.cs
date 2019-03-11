@@ -46,7 +46,7 @@ namespace AttachToDockerContainer
 
         private string[] GetContainerNames()
         {
-            var output = DockerCmd.Execute("ps --format \"{{.Names}}\"");
+            var output = DockerCli.Execute("ps --format \"{{.Names}}\"");
 
             return output
                 .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
