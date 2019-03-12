@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="AttachToDockerContainer.0a9825b5-d65c-457b-bdbe-dfccc1d17c4f" Version="0.1" Language="en-US" Publisher="Oleksandr Liakhevych" />
+        <Identity Id="AttachToDockerContainer.0a9825b5-d65c-457b-bdbe-dfccc1d17c4f" Version="0.1" Language="en-US" Publisher="Dreamescaper" />
         <DisplayName>Attach To Docker Container</DisplayName>
         <Description xml:space="preserve">Extension to attach debugger to local docker container via vsdbg</Description>
         <MoreInfo>https://github.com/Dreamescaper/AttachToDockerContainer/</MoreInfo>
