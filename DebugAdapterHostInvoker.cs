@@ -15,13 +15,12 @@ namespace AttachToDockerContainer
             _dte = dte;
         }
 
-        public void Launch(string containerName, string vsDbgPath)
+        public void Launch(string containerName, string vsDbgPath, int pid)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var dotnetPid = DockerCli.Execute($"exec -it {containerName} pidof dotnet");
 
             // Need to create json file to pass to DebugAdapterHost.Launch
-            var launchJsonPath = CreateLaunchJson(containerName, vsDbgPath, dotnetPid);
+            var launchJsonPath = CreateLaunchJson(containerName, vsDbgPath, pid);
 
             try
             {
@@ -33,7 +32,7 @@ namespace AttachToDockerContainer
             }
         }
 
-        private string CreateLaunchJson(string containerName, string vsDbgPath, string dotnetPid)
+        private string CreateLaunchJson(string containerName, string vsDbgPath, int dotnetPid)
         {
             var jsonText = $@"
             {{

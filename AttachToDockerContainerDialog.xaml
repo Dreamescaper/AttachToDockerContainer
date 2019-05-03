@@ -5,8 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-    Height="150" 
-    Width="350"
+    Height="165" 
+    Width="320"
     ResizeMode="NoResize"
     Title="Attach to Docker container">
     <Grid>
@@ -14,39 +14,51 @@
             x:Name="AttachButton"
             Click="AttachButton_Click"
             Content="Attach" 
-            HorizontalAlignment="Left"
-            Margin="135,85,0,0" 
+            HorizontalAlignment="Center"
+            Margin="0,105,0,0" 
             VerticalAlignment="Top" 
             Width="75"/>
         <ComboBox 
             x:Name="ContainerComboBox"
             HorizontalAlignment="Left" 
-            Margin="121,14,0,0"
+            Margin="100,14,0,0"
             VerticalAlignment="Top" 
             Width="198" 
             IsEditable="True" 
             IsTextSearchEnabled="True" 
-            IsSynchronizedWithCurrentItem="True"/>
+            IsSynchronizedWithCurrentItem="True"
+            SelectionChanged="ContainerComboBox_SelectionChanged"/>
         <TextBox 
             x:Name="VsDbgPathTextBox"
             HorizontalAlignment="Left" 
             Height="23"
-            Margin="121,41,0,0"
+            Margin="100,41,0,0"
             TextWrapping="Wrap"
             VerticalAlignment="Top" 
             Width="198"/>
+        <ComboBox 
+            x:Name="PidComboBox" 
+            HorizontalAlignment="Left" 
+            Margin="100,69,0,0" 
+            VerticalAlignment="Top" 
+            Width="198" />
         <Label 
             Content="Container:" 
             HorizontalAlignment="Left" 
-            Margin="10,10,0,0" 
+            Margin="5,10,0,0" 
             VerticalAlignment="Top"
-            RenderTransformOrigin="0.196,0.31" 
             Width="85"/>
         <Label 
             Content="VSDBG path:" 
             HorizontalAlignment="Left" 
             VerticalAlignment="Top" 
-            Margin="10,38,0,0" 
+            Margin="5,38,0,0" 
+            Width="85"/>
+        <Label 
+            Content="Process ID:" 
+            HorizontalAlignment="Left" 
+            Margin="5,65,0,0" 
+            VerticalAlignment="Top"
             Width="85"/>
     </Grid>
 </platformui:DialogWindow>

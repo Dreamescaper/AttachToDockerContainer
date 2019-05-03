@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -20,6 +21,9 @@ namespace AttachToDockerContainer
             _serviceProvider = serviceProvider;
             InitializeComponent();
 
+            AttachButton.IsEnabled = false;
+            PidComboBox.IsEnabled = false;
+
             var containerNames = GetContainerNames();
             var (previousContainer, previousVsDbgPath) = GetSettings();
 
@@ -29,6 +33,8 @@ namespace AttachToDockerContainer
                 : containerNames.FirstOrDefault();
 
             VsDbgPathTextBox.Text = previousVsDbgPath ?? VsDbgDefaultPath;
+
+            UpdateDotNetPIDs();
         }
 
         private void AttachButton_Click(object sender, RoutedEventArgs e)
@@ -37,11 +43,37 @@ namespace AttachToDockerContainer
 
             var containerName = ContainerComboBox.Text;
             var vsDbgPath = VsDbgPathTextBox.Text;
+            var pid = (int)PidComboBox.SelectedItem;
 
             SetSettings(containerName, vsDbgPath);
 
-            DebugAdapterHostLauncher.Instance.Launch(containerName, vsDbgPath);
+            DebugAdapterHostLauncher.Instance.Launch(containerName, vsDbgPath, pid);
             Close();
+        }
+
+        private void ContainerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateDotNetPIDs();
+        }
+
+        private void UpdateDotNetPIDs()
+        {
+            AttachButton.IsEnabled = false;
+            PidComboBox.IsEnabled = false;
+
+            var containerName = ContainerComboBox.Text;
+            var dotnetPids = DockerCli.Execute($"exec -it {containerName} pidof dotnet")
+                .Split(' ')
+                .Select(pid => int.Parse(pid))
+                .ToArray();
+
+            PidComboBox.ItemsSource = dotnetPids;
+
+            if (dotnetPids.Length > 1)
+                PidComboBox.IsEnabled = true;
+
+            if (dotnetPids.Length > 0)
+                AttachButton.IsEnabled = true;
         }
 
         private string[] GetContainerNames()
