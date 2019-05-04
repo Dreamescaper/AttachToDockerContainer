@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -27,7 +28,7 @@ namespace AttachToDockerContainer
             var containerNames = GetContainerNames();
             var (previousContainer, previousVsDbgPath) = GetSettings();
 
-            ContainerComboBox.ItemsSource = GetContainerNames();
+            ContainerComboBox.ItemsSource = containerNames;
             ContainerComboBox.Text = containerNames.Contains(previousContainer)
                 ? previousContainer
                 : containerNames.FirstOrDefault();
@@ -35,6 +36,8 @@ namespace AttachToDockerContainer
             VsDbgPathTextBox.Text = previousVsDbgPath ?? VsDbgDefaultPath;
 
             UpdateDotNetPIDs();
+
+            ContainerComboBox.SelectionChanged += ContainerComboBox_SelectionChanged;
         }
 
         private void AttachButton_Click(object sender, RoutedEventArgs e)
@@ -53,7 +56,8 @@ namespace AttachToDockerContainer
 
         private void ContainerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateDotNetPIDs();
+            Action action = () => UpdateDotNetPIDs();
+            Dispatcher.BeginInvoke(action);
         }
 
         private void UpdateDotNetPIDs()
@@ -61,19 +65,33 @@ namespace AttachToDockerContainer
             AttachButton.IsEnabled = false;
             PidComboBox.IsEnabled = false;
 
-            var containerName = ContainerComboBox.Text;
-            var dotnetPids = DockerCli.Execute($"exec -it {containerName} pidof dotnet")
-                .Split(' ')
-                .Select(pid => int.Parse(pid))
-                .ToArray();
+            var containerName = ContainerComboBox.SelectedItem as string;
+            if (string.IsNullOrWhiteSpace(containerName))
+                return;
 
-            PidComboBox.ItemsSource = dotnetPids;
+            var pidofResult = DockerCli.Execute($"exec -it {containerName} pidof dotnet");
 
-            if (dotnetPids.Length > 1)
-                PidComboBox.IsEnabled = true;
+            if (string.IsNullOrWhiteSpace(pidofResult))
+            {
+                PidComboBox.ItemsSource = new[] { "Cannot find dotnet process!" };
+                PidComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                var dotnetPids = pidofResult
+                    .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(pid => int.Parse(pid.Trim()))
+                    .ToArray();
 
-            if (dotnetPids.Length > 0)
-                AttachButton.IsEnabled = true;
+                PidComboBox.ItemsSource = dotnetPids;
+                PidComboBox.SelectedIndex = 0;
+
+                if (dotnetPids.Length > 1)
+                    PidComboBox.IsEnabled = true;
+
+                if (dotnetPids.Length > 0)
+                    AttachButton.IsEnabled = true;
+            }
         }
 
         private string[] GetContainerNames()

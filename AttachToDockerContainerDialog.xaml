@@ -15,7 +15,7 @@
             Click="AttachButton_Click"
             Content="Attach" 
             HorizontalAlignment="Center"
-            Margin="0,105,0,0" 
+            Margin="0,100,0,0" 
             VerticalAlignment="Top" 
             Width="75"/>
         <ComboBox 
@@ -26,8 +26,7 @@
             Width="198" 
             IsEditable="True" 
             IsTextSearchEnabled="True" 
-            IsSynchronizedWithCurrentItem="True"
-            SelectionChanged="ContainerComboBox_SelectionChanged"/>
+            IsSynchronizedWithCurrentItem="True"/>
         <TextBox 
             x:Name="VsDbgPathTextBox"
             HorizontalAlignment="Left" 
