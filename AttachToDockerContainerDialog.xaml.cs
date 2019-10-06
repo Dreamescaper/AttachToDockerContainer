@@ -71,17 +71,19 @@ namespace AttachToDockerContainer
 
             var pidofResult = DockerCli.Execute($"exec -it {containerName} pidof dotnet");
 
-            if (string.IsNullOrWhiteSpace(pidofResult))
+            var dotnetPidsParsed = pidofResult
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(pidStr => (valid: int.TryParse(pidStr.Trim(), out int pid), pid))
+                .ToArray();
+
+            if (dotnetPidsParsed.Length == 0 || dotnetPidsParsed.Any(vp => !vp.valid))
             {
                 PidComboBox.ItemsSource = new[] { "Cannot find dotnet process!" };
                 PidComboBox.SelectedIndex = 0;
             }
             else
             {
-                var dotnetPids = pidofResult
-                    .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(pid => int.Parse(pid.Trim()))
-                    .ToArray();
+                var dotnetPids = dotnetPidsParsed.Select(vp => vp.pid).ToArray();
 
                 PidComboBox.ItemsSource = dotnetPids;
                 PidComboBox.SelectedIndex = 0;
