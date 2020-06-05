@@ -53,6 +53,7 @@
     <Compile Include="AttachToDockerContainerDialog.xaml.cs">
       <DependentUpon>AttachToDockerContainerDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\IDEUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">

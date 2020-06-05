@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using AttachToDockerContainer.Utils;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -54,6 +55,15 @@ namespace AttachToDockerContainer
             Close();
         }
 
+        private string GetProcessIdOfContainer(string containerName)
+        {
+            string projectsNames = string.Join(" ", IDEUtils.GetNameOfProjects());
+            if (string.IsNullOrEmpty(projectsNames))
+                return null;
+                
+            return DockerCli.Execute($"exec -it {containerName} pidof {projectsNames}");
+        }
+
         private void ContainerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Action action = () => UpdateDotNetPIDs();
@@ -69,7 +79,9 @@ namespace AttachToDockerContainer
             if (string.IsNullOrWhiteSpace(containerName))
                 return;
 
-            var pidofResult = DockerCli.Execute($"exec -it {containerName} pidof dotnet");
+            var pidofResult = GetProcessIdOfContainer(containerName);
+            if (string.IsNullOrWhiteSpace(pidofResult))
+                return;
 
             var dotnetPidsParsed = pidofResult
                 .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
